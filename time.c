@@ -294,8 +294,14 @@ struct timespec tp;
                 memset(frmarg,0,sizeof(frmarg));
             	if (j >= 3) {
             		if ((unsigned)j < (sizeof(frmarg)/2)) {
-                        memset(tmp,0,sizeof(tmp));
-            			strncpy(tmp,&token[1],j-2);
+                  size_t copy_len = (size_t)(j - 2);
+                  // RAF: silencing the  __builtin___strncpy_chk -Wstringop-truncation
+                  if (copy_len >= sizeof(tmp))
+                  	copy_len = sizeof(tmp) - 1;
+                  memcpy(tmp, &token[1], copy_len);
+                  // RAF: having set the string terminator, don't need string zeroing
+                  tmp[copy_len] = '\0';
+                  pch1 = trim(tmp);
             			pch1=trim(tmp);
             			while ((*pch1=='-')|(*pch1=='+')) pch1++;
             			arglen=atoi(pch1);*pch1=0;
