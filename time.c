@@ -130,7 +130,7 @@ unsigned int ui0,ui1;
 	__tm.tm_yday = ((ui0-1461*(unsigned int)(__tm.tm_year))/4);
 	__tm.tm_mon = 13;
 	do {
-		if (__tm.tm_mon > 0) __tm.tm_mon--; else break;
+		__tm.tm_mon--;
 		ui1 = (__tm.tm_mon > 2) && ((__tm.tm_year & 3) == 0) ? 1 : 0;
 		ui0 = kLStime[__tm.tm_mon]+ui1;
 	} while ((unsigned)__tm.tm_yday < ui0);
