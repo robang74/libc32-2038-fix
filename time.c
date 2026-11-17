@@ -151,7 +151,8 @@ struct tm *__ret=gmtime(__timer);
 //=================================================================================================
 struct tm* localtime(const time_t *__timer)
 {
-	return gmtime(__timer+__timezone);
+	time_t tm = *__timer + __timezone;
+	return gmtime(&tm);
 }
 //=================================================================================================
 struct tm* localtime_r(const time_t *__restrict __timer, struct tm *__restrict __tp)
