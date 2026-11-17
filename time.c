@@ -408,10 +408,11 @@ struct timespec tp;
                 	tlen=sprintf(tmp, frmarg,(unsigned int)tm.tm_min);
                 	break;
                 case 'n':	//Nanosegundos
+                	memcpy(arg, &frmarg[frmarg_half_size], frmarg_half_size);
                 	//	Maximo valor : 0-4294967295999999999
-                	sprintf(frmarg, "\%%%s0%dllu",&frmarg[frmarg_half_size],arglen);
-            		sprintf(tmp, frmarg,timespec2ns(&tp));
-            		tmp[var128A.si[0]]=0;tlen=strlen(tmp);
+                	sprintf(frmarg, "\%%%s0%dllu", arg, arglen);
+            		  sprintf(tmp, frmarg,timespec2ns(&tp));
+            		  tmp[var128A.si[0]]=0;tlen=strlen(tmp);
                 	break;
                 case 'N':	//Nanosegundos
                 	//	Maximo valor : 0-2146828337 o 0-2146828337999999 o 0-86399 o 0-86399999999
