@@ -123,3 +123,9 @@ chmod 0755 /lib/libc.fix.so
 echo "/lib/libc.fix.so" > /etc/ld.so.preload
 ```
 
+<br>
+
+## Copyright & License
+
+- `Copyright (c) 2026, [LuCy] <luchoas26@gmail.com>, MIT License`
+- `Copyright (c) 2026, Roberto A. Foglietta <roberto.foglietta@gmail.com>`
