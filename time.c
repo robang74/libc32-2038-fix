@@ -236,7 +236,7 @@ size_t strftime (char *__restrict __s, size_t __maxsize, const char *__restrict 
 unsigned int lret=0;
 unsigned int tlen=0;
 char token[256];
-char tmp[64];
+char tmp[64], arg[16];
 char frmarg[32];
 int arglen;
 __tvar128 var128A;
@@ -342,7 +342,8 @@ struct timespec tp;
                 	if (arglen < 1) arglen=1;
                 	break;
                 }
-            	sprintf(frmarg, "\%%%s0%du",&frmarg[sizeof(frmarg)/2],arglen);
+            	memcpy(arg, &frmarg[sizeof(frmarg) >> 1], sizeof(frmarg) >> 1);
+            	sprintf(frmarg, "\%%%s0%du",arg,arglen);
 
                 switch(fmt_ch) {
                 case 'a': 	//Abbreviated weekday name 	Sun
