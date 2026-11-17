@@ -131,7 +131,7 @@ unsigned int ui0,ui1;
 		if (__tm.tm_mon > 0) __tm.tm_mon--; else break;
 		ui1 = (__tm.tm_mon > 2) && ((__tm.tm_year & 3) == 0) ? 1 : 0;
 		ui0 = kLStime[__tm.tm_mon]+ui1;
-	} while (__tm.tm_yday < ui0);
+	} while ((unsigned)__tm.tm_yday < ui0);
 	__tm.tm_mday = __tm.tm_yday-ui0+1;
 	if (__tm.tm_mday < 1) __tm.tm_mday = 1;
 	__tm.tm_year += 68;
@@ -262,7 +262,7 @@ struct timespec tp;
 	k=0;
 	j=0;
     for (i = 0; __format[i] != '\0'; i++) {
-    	if (k < (sizeof(token)-4)) {
+    	if ((unsigned)k < (sizeof(token)-4)) {
     		token[k++] = __format[i];
     	} else {
     		k=(sizeof(token)-4);
@@ -285,7 +285,7 @@ struct timespec tp;
             } else {
             	fmt_ch=0;
             	j=1;
-                while (j < (sizeof(token)-4)) {
+                while ((unsigned)j < (sizeof(token)-4)) {
                 	fmt_ch=token[j++];
 					if (fmt_ch >= 'A') break;
                 }
@@ -293,7 +293,7 @@ struct timespec tp;
                 arglen=0;
                 memset(frmarg,0,sizeof(frmarg));
             	if (j >= 3) {
-            		if (j < (sizeof(frmarg)/2)) {
+            		if ((unsigned)j < (sizeof(frmarg)/2)) {
                         memset(tmp,0,sizeof(tmp));
             			strncpy(tmp,&token[1],j-2);
             			pch1=trim(tmp);
