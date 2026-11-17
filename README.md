@@ -13,6 +13,8 @@
 > * **ABI Boundary Mismatch**: if a precompiled binary passes `time_t` pointers into kernel system calls directly (via raw syscalls rather than wrapped libc functions), the kernel will still interpret them as signed 32-bit integers, causing immediate overflow failures in 2038.
 >
 > * **Static Closed-Source**: the `LD_PRELOAD` and `/etc/ld.so.preload` apply to all dynamically linked executables. Statically linked binaries bypass the dynamic linker and will not load preloaded libraries. If the binary is closed-source and statically linked, `libc.fix` cannot hook into it.
+>
+> * **Internal Recursivity**: the library suffers from internal re-entrancy hazards that require to be evaluated and potentially fixed. Some library calls rely on non-reentrant functions that return pointers to internal static storage, and should be refactored to use reentrant API, instead
 
 ## Lightweight Y2K38 Mitigation 
 
