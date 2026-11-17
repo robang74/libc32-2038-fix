@@ -2,6 +2,8 @@
 
 **Source code available under MIT license**
 
+- Origin: https://lists.busybox.net/pipermail/busybox/2026-November/092584.html
+
 > [!WARNING]
 >
 > **LIMITITATIONS APPLY**
