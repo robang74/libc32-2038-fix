@@ -12,6 +12,8 @@
 #include <sys/ioctl.h>
 #include <sys/timeb.h>
 
+#define frmarg_half_size (sizeof(frmarg) >> 1)
+
 #include "time.h"
 //************************************************************************************************
 //DEFINICION CONSTANTES DE USO INTERNO
@@ -251,7 +253,6 @@ char* pch1;
 	if (__timezone < -43200) __timezone=-43200;
 	else if (__timezone > 50400) __timezone=50400;
 
-
 struct tm tm;
 struct timespec tp;
 
@@ -293,7 +294,7 @@ struct timespec tp;
                 arglen=0;
                 memset(frmarg,0,sizeof(frmarg));
             	if (j >= 3) {
-            		if ((unsigned)j < (sizeof(frmarg)/2)) {
+            		if ((unsigned)j < frmarg_half_size) {
                   size_t copy_len = (size_t)(j - 2);
                   // RAF: silencing the  __builtin___strncpy_chk -Wstringop-truncation
                   if (copy_len >= sizeof(tmp))
@@ -307,7 +308,7 @@ struct timespec tp;
             			arglen=atoi(pch1);*pch1=0;
             			if (arglen < 1) arglen=1;
             			else if (arglen > 32) arglen=32;
-            			strcpy(&frmarg[sizeof(frmarg)/2],tmp);
+            			strcpy(&frmarg[frmarg_half_size],tmp);
             		}
             	}
 
@@ -347,7 +348,7 @@ struct timespec tp;
                 	if (arglen < 1) arglen=1;
                 	break;
                 }
-            	memcpy(arg, &frmarg[sizeof(frmarg) >> 1], sizeof(frmarg) >> 1);
+            	memcpy(arg, &frmarg[frmarg_half_size], frmarg_half_size);
             	sprintf(frmarg, "\%%%s0%du",arg,arglen);
 
                 switch(fmt_ch) {
@@ -397,7 +398,7 @@ struct timespec tp;
                 	break;
                 case 'n':	//Nanosegundos
                 	//	Maximo valor : 0-4294967295999999999
-                	sprintf(frmarg, "\%%%s0%dllu",&frmarg[sizeof(frmarg)/2],arglen);
+                	sprintf(frmarg, "\%%%s0%dllu",&frmarg[frmarg_half_size],arglen);
             		sprintf(tmp, frmarg,timespec2ns(&tp));
             		tmp[var128A.si[0]]=0;tlen=strlen(tmp);
                 	break;
