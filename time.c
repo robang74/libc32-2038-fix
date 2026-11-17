@@ -308,7 +308,9 @@ struct timespec tp;
             			arglen=atoi(pch1);*pch1=0;
             			if (arglen < 1) arglen=1;
             			else if (arglen > 32) arglen=32;
-            			strcpy(&frmarg[frmarg_half_size],tmp);
+            			// RAF: copy safely into 'arg' (size 16) w/o risking buffer overflow
+            			strncpy(&frmarg[frmarg_half_size], tmp, frmarg_half_size-1);
+            			frmarg[sizeof(frmarg)-1] = '\0';
             		}
             	}
 
