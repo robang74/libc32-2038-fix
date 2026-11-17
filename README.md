@@ -10,7 +10,7 @@
 
 ## Rationale
 
-The Y2K38 is 12 years ahead, it might sounds like a long runway in the fast-moving world of web and consumer software, it is actually right inside the active operational lifecycle of many embedded systems deployed today. Many devices manufactured and installed right now are expected to stay in service for 15, 20, or even 30 years. If a 32-bit system is deployed today, it will still be running well past January 19, 2038.
+The Y2K38 is 12 years ahead, it might sound like a long runway in the fast-moving world of web and consumer software, it is actually right inside the active operational lifecycle of many embedded systems deployed today. Many devices manufactured and installed right now are expected to stay in service for 15, 20, or even 30 years. If a 32-bit system is deployed today, it will still be running well past January 19, 2038.
 
 ### Target sectors of application
 
@@ -42,7 +42,7 @@ Built specifically for deployed hardware running legacy kernels and closed-sourc
 >
 > **LIMITITATIONS APPLY**
 > 
-> * **The Pre-1970 Blind Spot**: it is a fundamentally flawed approach for systems that rely on timestamps before January 1, 1970 (UNIX epoch). Because standard 32-bit `time_t` is signed 32-bit integers, historical dates are represented as negative numbers while the unigned wraps after 2038.
+> * **The Pre-1970 Blind Spot**: it is a fundamentally flawed approach for systems that rely on timestamps before January 1, 1970 (UNIX epoch). Because standard 32-bit `time_t` is signed 32-bit integers, historical dates are represented as negative numbers while the unsigned wraps after 2038.
 >
 > * **ABI Boundary Mismatch**: if a precompiled binary passes `time_t` pointers into kernel system calls directly (via raw syscalls rather than wrapped libc functions), the kernel will still interpret them as signed 32-bit integers, causing immediate overflow failures in 2038.
 >
@@ -80,7 +80,7 @@ Instead of altering the 4-byte `time_t` ABI — which would corrupt stack layout
 
 ## Building
 
-Compiling on 64-bit systems, isn't relevant but it compiles.
+Compiling on 64-bit systems isn't relevant but it compiles.
 
 #### Native Compilation (32-bit host/container)
 
