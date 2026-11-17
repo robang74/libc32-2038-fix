@@ -80,7 +80,15 @@ Instead of altering the 4-byte `time_t` ABI — which would corrupt stack layout
 
 ## Building
 
-### Cross-Compilation (ARM / MIPS / x86 / PowerPC 32-bit)
+Compiling on 64-bit systems, isn't relevant but it compiles.
+
+#### Native Compilation (32-bit host/container)
+
+```bash
+make
+```
+
+#### Cross-Compilation (ARM / MIPS / x86 / PowerPC 32-bit)
 
 ```bash
 # Generic ARM 32-bit (Buildroot / OpenWrt / armhf)
@@ -92,12 +100,6 @@ CFLAGS="-O2 -march=armv7-a -mfloat-abi=softfp -mfpu=neon -fPIC -D_GNU_SOURCE"
 
 # MIPS 32-bit
 make CROSS_COMPILE=mipsel-linux-gnu-
-```
-
-### Native Compilation (32-bit host/container)
-
-```bash
-make
 ```
 
 <br>
