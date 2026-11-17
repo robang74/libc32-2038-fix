@@ -48,7 +48,7 @@ Built specifically for deployed hardware running legacy kernels and closed-sourc
 >
 > * **Static Closed-Source**: the `LD_PRELOAD` and `/etc/ld.so.preload` apply to all dynamically linked executables. Statically linked binaries bypass the dynamic linker and will not load preloaded libraries. If the binary is closed-source and statically linked, `libc.fix` cannot hook into it.
 >
-> * **Internal Recursivity**: the library suffers from internal re-entrancy hazards that require to be evaluated and potentially fixed. Some library calls rely on non-reentrant functions that return pointers to internal static storage, and should be refactored to use reentrant API, instead
+> * **Non-Reentrant calls**: some functions rely on non-reentrant functions that return pointers to internal static storage. These dependencies introduce shared mutable state and potential interference between concurrent or nested calls. Further evaluation and refactoring are required, yet.
 
 <br>
 
