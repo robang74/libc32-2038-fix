@@ -513,10 +513,13 @@ int gettimeofday (struct timeval *__restrict __tv, void *__restrict __tz)
 	(void)__tz;
 	if (clock_gettime(CLOCK_REALTIME, &ts) == -1) return -1;
 	memcpy(&actual_time,&ts,sizeof(struct timespec));
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wnonnull-compare"
 	if (__tv != NULL) {
 		__tv->tv_sec=ts.tv_sec;
 		__tv->tv_usec=ts.tv_nsec / NSEC_PER_USEC;
 	}
+#pragma GCC diagnostic pop
 	return 0;
 }
 //=================================================================================================
