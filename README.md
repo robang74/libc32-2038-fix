@@ -2,9 +2,13 @@
 
 **Source code available under MIT license**
 
-- Origin: https://lists.busybox.net/pipermail/busybox/2026-November/092584.html
+- Origin: [lists.busybox.net/pipermail/busybox/2026-November/092584.html](https://lists.busybox.net/pipermail/busybox/2026-November/092584.html)
 
-### Rationale
+- Index: [Rationale](#rationale) &nbsp;&middot;&nbsp; [Mitigation](#lightweight-y2k38-mitigation) &nbsp;&middot;&nbsp; [How It Works](#how-it-works) &nbsp;&middot;&nbsp; [Building](#building) &nbsp;&middot;&nbsp; [Deployment](#deployment--usage)
+
+<br>
+
+## Rationale
 
 The Y2K38 is 12 years ahead, it might sounds like a long runway in the fast-moving world of web and consumer software, it is actually right inside the active operational lifecycle of many embedded systems deployed today. Many devices manufactured and installed right now are expected to stay in service for 15, 20, or even 30 years. If a 32-bit system is deployed today, it will still be running well past January 19, 2038.
 
@@ -64,9 +68,7 @@ Instead of altering the 4-byte `time_t` ABI — which would corrupt stack layout
 
 * **BusyBox & Legacy Daemon Compatible:** Works seamlessly with dynamically linked BusyBox applets (`date`, `crond`, `syslogd`, `ntpd`, `httpd`) and proprietary userland services.
 
-<br>
-
-## Intercepted Functions
+### Intercepted Functions
 
 * `time()`, `stime()`, `gettimeofday()`, `settimeofday()`
 * `gmtime()`, `gmtime_r()`, `localtime()`, `localtime_r()`
