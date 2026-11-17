@@ -509,7 +509,8 @@ int gettimeofday (struct timeval *__restrict __tv, struct timezone *__restrict _
 int gettimeofday (struct timeval *__restrict __tv, void *__restrict __tz)
 #endif
 {
-struct timespec ts;
+	struct timespec ts;
+	(void)__tz;
 	if (clock_gettime(CLOCK_REALTIME, &ts) == -1) return -1;
 	memcpy(&actual_time,&ts,sizeof(struct timespec));
 	if (__tv != NULL) {
@@ -521,7 +522,8 @@ struct timespec ts;
 //=================================================================================================
 int settimeofday (const struct timeval *__tv, const struct timezone *__tz)
 {
-struct timespec ts;
+  struct timespec ts;
+	(void)__tz;
 	ts.tv_sec=__tv->tv_sec;
 	ts.tv_nsec=__tv->tv_usec * NSEC_PER_USEC;
 	memcpy(&actual_time,&ts,sizeof(struct timespec));
