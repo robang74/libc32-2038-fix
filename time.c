@@ -120,17 +120,19 @@ unsigned int ui0,ui1;
 
 	__tm.tm_wday = (((ui0/86400)+4) % 7);
 	ui1 = ui0/60;
-	__tm.tm_sec = (ui0-60*ui1);
+	__tm.tm_sec = (ui0-(60*ui1));
 	ui0 = ui1/60;
-	__tm.tm_min = (ui1-60*ui0);
+	__tm.tm_min = (ui1-(60*ui0));
 	ui1 = ui0/24;
-	__tm.tm_hour = (ui0-24*ui1);
+	__tm.tm_hour = (ui0-(24*ui1));
 	ui0 = 4*(ui1+731);
 	__tm.tm_year = (ui0/1461);
 	__tm.tm_yday = ((ui0-1461*(unsigned int)(__tm.tm_year))/4);
 	__tm.tm_mon = 13;
 	do {
 		__tm.tm_mon--;
+		if (__tm.tm_year == 2100) ui1 = 0;
+		else
 		ui1 = (__tm.tm_mon > 2) && ((__tm.tm_year & 3) == 0) ? 1 : 0;
 		ui0 = kLStime[__tm.tm_mon]+ui1;
 	} while ((unsigned)__tm.tm_yday < ui0);
