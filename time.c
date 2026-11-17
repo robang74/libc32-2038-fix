@@ -134,7 +134,6 @@ unsigned int ui0,ui1;
 	} while (__tm.tm_yday < ui0);
 	__tm.tm_mday = __tm.tm_yday-ui0+1;
 	if (__tm.tm_mday < 1) __tm.tm_mday = 1;
-	if (__tm.tm_mon > 0) __tm.tm_mon--;
 	__tm.tm_year += 68;
 
 	memcpy(&__ret,&__tm,sizeof(struct tm));
