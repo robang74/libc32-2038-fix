@@ -94,7 +94,11 @@ time_t timegm (struct tm *__tp);
 time_t timelocal (struct tm *__tp);
 int stime (const time_t *__when);
 time_t time (time_t *__timer);
+#ifdef OLD_TOOL_CHAIN
 int gettimeofday (struct timeval *__restrict __tv, struct timezone *__restrict __tz);
+#else
+int gettimeofday (struct timeval *__restrict __tv, void *__restrict __tz);
+#endif
 int settimeofday (const struct timeval *__tv, const struct timezone *__tz);
 unsigned long long timespec2ns(struct timespec* __tp);
 

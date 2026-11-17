@@ -496,7 +496,11 @@ struct timeval tv;
 	return tv.tv_sec;
 }
 //=================================================================================================
+#ifdef OLD_TOOL_CHAIN
 int gettimeofday (struct timeval *__restrict __tv, struct timezone *__restrict __tz)
+#else
+int gettimeofday (struct timeval *__restrict __tv, void *__restrict __tz)
+#endif
 {
 struct timespec ts;
 	if (clock_gettime(CLOCK_REALTIME, &ts) == -1) return -1;
