@@ -349,6 +349,15 @@ struct timespec tp;
                 	break;
                 }
             	memcpy(arg, &frmarg[frmarg_half_size], frmarg_half_size);
+/*
+ * WARNING -- Potential Format String RiskLocation
+ *
+ * The Issue: arg is derived from user-controlled format specifier modifiers extracted from __format.
+ * If arg contains unexpected format specifiers (such as %n or additional % signs), passing it directly
+ * into sprintf's format argument can cause undefined behavior or format string injection vulnerabilities.
+ * Ensure arg is strictly filtered to only contain numeric digits or expected width specifiers before
+ * passing it to sprintf (aka user inputs sanification).
+ */
             	sprintf(frmarg, "\%%%s0%du",arg,arglen);
 
                 switch(fmt_ch) {
