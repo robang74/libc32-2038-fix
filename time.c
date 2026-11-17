@@ -132,7 +132,7 @@ unsigned int ui0,ui1;
 	do {
 		__tm.tm_mon--;
 		ui1 = 0;
-		if (__tm.tm_mon > 2 && __tm.tm_year != 2100)
+		if (__tm.tm_mon > 2 && __tm.tm_year != 2100-1900-68)
 			  ui1 = !(__tm.tm_year & 3);
 		ui0 = kLStime[__tm.tm_mon]+ui1;
 	} while ((unsigned)__tm.tm_yday < ui0);
