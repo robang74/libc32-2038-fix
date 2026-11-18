@@ -224,6 +224,8 @@ In fact, most developers are working on modern x64 (64-bit) Linux hosts or macOS
 > [!WARNING]
 > 
 > **Kernel vs Userland date/time interpretation mismatch risks**
+> 
+> Following examples have been elaborated by a non-exhaustive set of scenarios simulation supported by AI because every production-ready assessment strictly requires a customised testsuite checking the whole system running on the very specific real hardware, not even on a virtual machine.
 
 For example, on a full 32-bit system, when `root` sets the date/time to `2045-06-15 12:34:56`, an *un-preloaded* userland daemon writes it, in `/var/log/syslog`, within the `1901-to-1970` range while an application under `libc.fix.so` would have displayed a date within the `2038-to-2106` range.
 
