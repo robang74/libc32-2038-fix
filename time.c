@@ -12,7 +12,9 @@
 #include <dlfcn.h>
 #include <fcntl.h>
 #include <errno.h>
+#ifdef __GLIBC__
 #include <bits/types.h>
+#endif
 #include <sys/syscall.h>
 #include <sys/timex.h>
 #include <sys/ioctl.h>

@@ -7,7 +7,9 @@
 #ifndef __TIME_H_
 #define __TIME_H_
 
+#ifdef __GLIBC__
 #include <bits/time.h>
+#endif
 
 //#include <time.h>
 //************************************************************************************************

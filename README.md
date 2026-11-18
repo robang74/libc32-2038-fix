@@ -87,6 +87,10 @@ Compiling on 64-bit systems isn't relevant but it compiles.
 ```bash
 make
 ```
+or
+```bash
+make CFLAGS="-DOLD_TOOL_CHAIN"
+```
 
 #### Cross-Compilation (ARM / MIPS / x86 / PowerPC 32-bit)
 
@@ -100,6 +104,16 @@ CFLAGS="-O2 -march=armv7-a -mfloat-abi=softfp -mfpu=neon -fPIC -D_GNU_SOURCE"
 
 # MIPS 32-bit
 make CROSS_COMPILE=mipsel-linux-gnu-
+```
+
+#### Alpine 32-bit container compilation
+
+- How to [Preparing the container for building](https://github.com/robang74/uchaosys/blob/v074/kdev/umkaos32.md#preparing-the-container-for-building)
+
+```bash
+test -e src || ln -s . src
+docker run -i --rm $devc /bin/sh -i
+/src $ make
 ```
 
 <br>
