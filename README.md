@@ -134,7 +134,8 @@ export devc
 ```bash
 test -e src || ln -s . src
 docker run -it --rm $devc /bin/ash -c "make all"
-
+```
+```text
 rm -f time.o libc.fix.so
 gcc -O2 -Wall -Wextra -fPIC -D_GNU_SOURCE -c time.c -o time.o
 gcc -shared -Wl,-soname,libc.fix.so -o libc.fix.so time.o -ldl
@@ -152,7 +153,19 @@ LD_PRELOAD=./libc.fix.so date -d "2045-06-15 12:34:56"
 Wed Jun 15 12:34:56 +00:00 2045
 ```
 
-- **Note**: Alpine 32-bit w/ musl already support 64-bit extended `time_t`.
+> [!NOTE]
+>
+> Alpine 32-bit w/ musl already support 64-bit extended `time_t` by `_TIME_BITS=64`.
+
+#### Full 32-bit Testing
+
+To test the `lib.fix.so` in a full 32-bit container the candidates are, in order of smaller image size:
+
+- `i386/ubuntu:14.04`, `i386/centos:6` e `i386/debian:jessie`
+
+For Ubuntu, the instructions for installing the necessary packages are:
+
+- `apt-get update && apt-get install -y build-essential`
 
 <br>
 
