@@ -221,6 +221,22 @@ In fact, most developers are working on modern x64 (64-bit) Linux hosts or macOS
 
 ## Deployment & Usage
 
+> [!WARNING]
+> 
+> **Kernel vs Userland date/time interpretation mismatch risks**
+
+For example, on a full 32-bit system, when `root` sets the date/time to `2045-06-15 12:34:56`, an *un-preloaded* userland daemon writes it, in `/var/log/syslog`, within the `1901-to-1970` range while an application under `libc.fix.so` would have displayed a date within the `2038-to-2106` range.
+
+To manage this gap, the `libc.fix.so` intercepts the `date -s` syscall in a way the kernel adds an offset. However, the fact that `ADJ_SETOFFSET` exists since Linux 2.6.39 does not guarantee, by itself, a full Y2038-safe internal timekeeping and a negative value can be provided.
+
+When the kernel correctly interpretes the offset into the `2038-to-2106` range by `ADJ_SETOFFSET`, the applications which aren't under the `libc.fix.so` receive a negative value, by reading the `time()` from a bare syscall, which falls within the `1901-to-1970` range.
+
+While an `EOVERFLOW` is triggered when a modern or mixed-ABI user-space component attempts to coerce a legacy 32-bit time value into 64-bit structures. Therefore, presuming 64-bit Y2038-safe applications would interoperate seamlessly, is a hazardous bet unless checking.
+
+A comparable discrepancy occurs when the `printk()` writes a date/time read from a { filesystem, network, firmware, chips } which could be found checking by `dmesg`. While monotonic booting timestamps refers to the ticking subsystem T=`[0.000]` initialisation, instead.
+
+---
+
 ### 1. Test on a single command
 
 ```bash
