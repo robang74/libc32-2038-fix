@@ -92,6 +92,27 @@ or
 make CFLAGS="-DOLD_TOOL_CHAIN" all
 ```
 
+The expected result on a 64-bit system is a failure:
+
+```text
+rm -f time.o libc.fix.so
+gcc -O2 -Wall -Wextra -fPIC -D_GNU_SOURCE -c time.c -o time.o
+gcc -shared -Wl,-soname,libc.fix.so -o libc.fix.so time.o -ldl
+strip --strip-unneeded libc.fix.so
+size libc.fix.so
+   text	   data	    bss	    dec	    hex	filename
+  12451	   1152	    152	  13755	   35bb	libc.fix.so
+date
+Wed 18 Nov 08:02:34 CET 2026
+LD_PRELOAD=./libc.fix.so date
+Wed 18 Nov 07:02:34  2026
+date -d "2045-06-15 12:34:56"
+Thu 15 Jun 12:34:56 CEST 2045
+LD_PRELOAD=./libc.fix.so date -d "2045-06-15 12:34:56"
+date: invalid date ‘2045-06-15 12:34:56’
+make: *** [Makefile:40: tests] Error 1
+```
+
 #### Cross Compilation
 
 ```bash
