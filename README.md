@@ -112,8 +112,13 @@ make CROSS_COMPILE=mipsel-linux-gnu-
 
 ```bash
 test -e src || ln -s . src
-docker run -it --rm $devc /bin/sh -i
-/src $ make
+docker run -it --rm $devc /bin/ash -c "make && size libc.fix.so"
+
+gcc -O2 -Wall -Wextra -fPIC -D_GNU_SOURCE -c time.c -o time.o
+gcc -shared -Wl,-soname,libc.fix.so -o libc.fix.so time.o -ldl
+strip --strip-unneeded libc.fix.so
+   text	   data	    bss	    dec	    hex	filename
+  14051	    612	    140	  14803	   39d3	libc.fix.so
 ```
 
 <br>

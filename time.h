@@ -30,6 +30,8 @@
 //DEFINICION TIPOS Y ESTRUCTURAS
 #ifdef __GLIBC__
 typedef __time_t time_t;
+#else
+typedef long __syscall_slong_t;
 #endif
 
 struct tm
