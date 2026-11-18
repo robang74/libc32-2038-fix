@@ -1,10 +1,12 @@
-# libc.fix 2038
+# libc.fix 2038 (32-bit)
 
 **Source code available under MIT license**
 
 - Origin: [lists.busybox.net/pipermail/busybox/2026-November/092584.html](https://lists.busybox.net/pipermail/busybox/2026-November/092584.html)
 
 - Index: [Rationale](#rationale) &nbsp;&middot;&nbsp; [Mitigation](#lightweight-y2k38-mitigation) &nbsp;&middot;&nbsp; [How It Works](#how-it-works) &nbsp;&middot;&nbsp; [Building](#building) &nbsp;&middot;&nbsp; [Deployment](#deployment--usage)
+
+Lightweight Y2K38 mitigation wrapper for 32-bit legacy systems (2106 extension), in few KB.
 
 <br>
 
