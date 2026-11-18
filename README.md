@@ -167,6 +167,12 @@ For Ubuntu, the instructions for installing the necessary packages are:
 
 - `apt-get update && apt-get install -y build-essential`
 
+Pre-cooked copy-paste recipes are fantastic for instant gratification. They let a user verify that the code builds and runs in under two minutes without having to think about environment setup.
+
+Unfortunately, this is the one of the most unsuitable cases for such an approach since it is a kind of hacking a userland system layer for a legacy 32-bit system. Therefore, also emulation should be very specific.
+
+In fact, most developers are working on modern x64 (64-bit) Linux hosts or macOS/Windows via WSL2, running i386-container relies entirely on transparent user-space emulation (`qemu-user` via `binfmt_misc`).
+
 <br>
 
 ## Deployment & Usage
