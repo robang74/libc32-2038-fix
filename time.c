@@ -98,7 +98,7 @@ int retry;
 		if (ns_dif < LIM_NSTIME64_NEG) ns_dif=LIM_NSTIME64_NEG;
 		else if (ns_dif > LIM_NSTIME64_POS) ns_dif=LIM_NSTIME64_POS;
 		else retry=0xFFFF;
-		tp.tv_sec=(__time_t)((long long)ns_dif/(long long)NSEC_PER_SEC);
+		tp.tv_sec=(time_t)((long long)ns_dif/(long long)NSEC_PER_SEC);
 		tp.tv_nsec=(__syscall_slong_t)((long long)ns_dif % (long long)NSEC_PER_SEC);
 		while (tp.tv_nsec < 0) {
 			tp.tv_nsec += NSEC_PER_SEC;

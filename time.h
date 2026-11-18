@@ -9,6 +9,8 @@
 
 #ifdef __GLIBC__
 #include <bits/time.h>
+#else
+#include <time.h> /* Ensure standard musl time declarations are pulled */
 #endif
 
 //#include <time.h>
@@ -26,7 +28,9 @@
 
 //************************************************************************************************
 //DEFINICION TIPOS Y ESTRUCTURAS
+#ifdef __GLIBC__
 typedef __time_t time_t;
+#endif
 
 struct tm
 {
@@ -82,8 +86,10 @@ extern const char* __Hfmt[];
 extern long int __timezone;	/* Seconds west of UTC.  */
 //************************************************************************************************
 //DEFINICION DE FUNCIONES EXTERNAS
+#ifdef __GLIBC__
 extern int clock_gettime (__clockid_t __clock_id, struct timespec *__tp) __THROW;
 extern int clock_adjtime (__clockid_t __clock_id, struct timex *__utx) __THROW;
+#endif
 
 //************************************************************************************************
 //DEFINICION DE FUNCIONES

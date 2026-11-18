@@ -112,7 +112,7 @@ make CROSS_COMPILE=mipsel-linux-gnu-
 
 ```bash
 test -e src || ln -s . src
-docker run -i --rm $devc /bin/sh -i
+docker run -it --rm $devc /bin/sh -i
 /src $ make
 ```
 
