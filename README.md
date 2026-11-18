@@ -129,7 +129,7 @@ make CROSS_COMPILE=mipsel-linux-gnu-
 
 ### Container Compilation
 
-Alpine 32-bit container compilation w/ musl, for example:
+Alpine 32-bit container compilation with musl, for example:
 
 ```bash
 # Container preparation:
@@ -183,13 +183,13 @@ Wed Jun 15 12:34:56 +00:00 2045
 
 To test the `lib.fix.so` in a full 32-bit container the candidates are, in order of smaller image size:
 
-- `i386/ubuntu:14.04`, `i386/centos:6` e `i386/debian:jessie`
+- `i386/ubuntu:14.04`, `i386/centos:6` and `i386/debian:jessie`
 
 For Ubuntu, the instructions for installing the necessary packages are:
 
 - `apt-get update && apt-get install -y build-essential`
 
-The expected result on a full 32-bit system is a failure w/o `libc.fix.so` and a success when the fix applies:
+The expected result on a full 32-bit system is a failure without `libc.fix.so` and a success when the fix applies:
 
 ```text
 rm -f time.o libc.fix.so
