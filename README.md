@@ -240,12 +240,17 @@ echo "/lib/libc.fix.so" > /etc/ld.so.preload
 
 ## Copyright & License
 
-**Sources**:
+This project is being used to demonstrate capability and generate commercial opportunity by a MVP-oriented commercial demonstration, not to offer development for free. Which, essentially, is the distinction between open-source visibility and commercial engineering. The MIT license choice only indicates the will to not enforce any kind of source-sharing obligation over those that haven't it beforehands (or not anymore).
+
+**Sources**: `time.c`, `time.h` and `makefile`
 
 - `Copyright (c) 2026, [LuCy] <luchoas26@gmail.com>, MIT License`
 - `Copyright (c) 2026, Roberto A. Foglietta <roberto.foglietta@gmail.com>`
 
-**README.md**:
+**Manual**: `README.md`
 
 - `(c) 2026, Creative Commons Attribution-NonCommercial 4.0 International, by RAF`
 
+#### Credits
+
+- Original technical concept by `LuCy`. Hardening, portability, validation and project engineering by `RAF`. 
