@@ -34,5 +34,7 @@ clean:
 	rm -f $(OBJS) $(TARGET)
 
 tests: $(TARGET)
+	date
 	LD_PRELOAD=./$< date
+	date -d "2045-06-15 12:34:56"
 	LD_PRELOAD=./$< date -d "2045-06-15 12:34:56"

@@ -110,7 +110,26 @@ make CROSS_COMPILE=mipsel-linux-gnu-
 
 Alpine 32-bit container compilation w/ musl, for example:
 
-- How to [Preparing the container for building](https://github.com/robang74/uchaosys/blob/v074/kdev/umkaos32.md#preparing-the-container-for-building)
+```bash
+# Container preparation:
+docker run -it i386/alpine:latest /bin/sh
+# Inside the container:
+apk update
+apk add build-base musl-dev
+exit
+
+# get the container id with
+docker ps -a | grep i386/alpine:latest
+
+# after grabbed the container id
+docker commit $cont-id alpine-i386-dev
+docker rename $cont-id alpine-i386-dev
+
+devc="-u $(id -u):$(id -g) -v .:/src -w /src alpine-i386-dev"
+export devc
+```
+
+- How to [Preparing the container for building](https://github.com/robang74/uchaosys/blob/v074/kdev/umkaos32.md#preparing-the-container-for-building) in full, from μChaoSys `umkaos32` instructions.
 
 ```bash
 test -e src || ln -s . src
@@ -123,11 +142,17 @@ strip --strip-unneeded libc.fix.so
 size libc.fix.so
    text	   data	    bss	    dec	    hex	filename
   14051	    612	    140	  14803	   39d3	libc.fix.so
+date
+Wed Nov 18 06:28:08 UTC 2026
 LD_PRELOAD=./libc.fix.so date
-Wed Nov 18 06:11:51 +00:00 2026
+Wed Nov 18 06:28:08 +00:00 2026
+date -d "2045-06-15 12:34:56"
+Thu Jun 15 12:34:56 UTC 2045
 LD_PRELOAD=./libc.fix.so date -d "2045-06-15 12:34:56"
 Wed Jun 15 12:34:56 +00:00 2045
 ```
+
+- **Note**: Alpine 32-bit w/ musl already support 64-bit extended `time_t`.
 
 <br>
 
