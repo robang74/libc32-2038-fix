@@ -82,17 +82,17 @@ Instead of altering the 4-byte `time_t` ABI — which would corrupt stack layout
 
 Compiling on 64-bit systems isn't relevant but it compiles.
 
-#### Native Compilation (32-bit host/container)
+#### Native Compilation
 
 ```bash
-make
+make all
 ```
 or
 ```bash
-make CFLAGS="-DOLD_TOOL_CHAIN"
+make CFLAGS="-DOLD_TOOL_CHAIN" all
 ```
 
-#### Cross-Compilation (ARM / MIPS / x86 / PowerPC 32-bit)
+#### Cross Compilation
 
 ```bash
 # Generic ARM 32-bit (Buildroot / OpenWrt / armhf)
@@ -106,29 +106,37 @@ CFLAGS="-O2 -march=armv7-a -mfloat-abi=softfp -mfpu=neon -fPIC -D_GNU_SOURCE"
 make CROSS_COMPILE=mipsel-linux-gnu-
 ```
 
-#### Alpine 32-bit container compilation
+#### Container Compilation
+
+Alpine 32-bit container compilation w/ musl, for example:
 
 - How to [Preparing the container for building](https://github.com/robang74/uchaosys/blob/v074/kdev/umkaos32.md#preparing-the-container-for-building)
 
 ```bash
 test -e src || ln -s . src
-docker run -it --rm $devc /bin/ash -c "make && size libc.fix.so"
+docker run -it --rm $devc /bin/ash -c "make all"
 
+rm -f time.o libc.fix.so
 gcc -O2 -Wall -Wextra -fPIC -D_GNU_SOURCE -c time.c -o time.o
 gcc -shared -Wl,-soname,libc.fix.so -o libc.fix.so time.o -ldl
 strip --strip-unneeded libc.fix.so
+size libc.fix.so
    text	   data	    bss	    dec	    hex	filename
   14051	    612	    140	  14803	   39d3	libc.fix.so
+LD_PRELOAD=./libc.fix.so date
+Wed Nov 18 06:11:51 +00:00 2026
+LD_PRELOAD=./libc.fix.so date -d "2045-06-15 12:34:56"
+Wed Jun 15 12:34:56 +00:00 2045
 ```
 
 <br>
 
 ## Deployment & Usage
 
-### 1. Test on a single command (BusyBox `date`)
+### 1. Test on a single command
 
 ```bash
-LD_PRELOAD=/path/to/libc.fix.so date -s "2045-06-15 12:00:00"
+LD_PRELOAD=/path/to/libc.fix.so date -d "2045-06-15 12:34:56"
 LD_PRELOAD=/path/to/libc.fix.so date
 ```
 

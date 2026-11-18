@@ -14,13 +14,14 @@ LDLIBS        ?= -ldl
 PREFIX        ?= /usr/local
 LIBDIR        ?= $(PREFIX)/lib
 
-.PHONY: all clean install strip
+.PHONY: all clean install tests
 
-all: $(TARGET)
+all: clean $(TARGET) tests
 
 $(TARGET): $(OBJS)
 	$(CC) $(LDFLAGS) -o $@ $^ $(LDLIBS)
 	$(STRIP) --strip-unneeded $@
+	size $@
 
 %.o: %.c time.h
 	$(CC) $(CFLAGS) -c $< -o $@
@@ -31,3 +32,7 @@ install: $(TARGET)
 
 clean:
 	rm -f $(OBJS) $(TARGET)
+
+tests: $(TARGET)
+	LD_PRELOAD=./$< date
+	LD_PRELOAD=./$< date -d "2045-06-15 12:34:56"
