@@ -236,9 +236,7 @@ chmod 0755 /lib/libc.fix.so
 echo "/lib/libc.fix.so" > /etc/ld.so.preload
 ```
 
-<br>
-
-## Copyright & License
+### 3. Copyright & License
 
 This project is being used to demonstrate capability and generate commercial opportunity by a MVP-oriented commercial demonstration, not to offer development for free. Which, essentially, is the distinction between open-source visibility and commercial engineering. The MIT license choice only indicates the will to not enforce any kind of source-sharing obligation over those that haven't it beforehands (or not anymore).
 
