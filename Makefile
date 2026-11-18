@@ -36,5 +36,5 @@ clean:
 tests: $(TARGET)
 	date
 	LD_PRELOAD=./$< date
-	date -d "2045-06-15 12:34:56"
+	date -d "2045-06-15 12:34:56" || true
 	LD_PRELOAD=./$< date -d "2045-06-15 12:34:56"

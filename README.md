@@ -189,6 +189,26 @@ For Ubuntu, the instructions for installing the necessary packages are:
 
 - `apt-get update && apt-get install -y build-essential`
 
+The expected result on a full 32-bit system is a failure w/o `libc.fix.so` and a success when the fix applies:
+
+```text
+rm -f time.o libc.fix.so
+gcc -DOLD_TOOL_CHAIN -c time.c -o time.o
+gcc -shared -Wl,-soname,libc.fix.so -o libc.fix.so time.o -ldl
+strip --strip-unneeded libc.fix.so
+size libc.fix.so
+   text	   data	    bss	    dec	    hex	filename
+  14380	    516	    160	  15056	   3ad0	libc.fix.so
+date
+Wed Nov 18 07:24:51 UTC 2026
+LD_PRELOAD=./libc.fix.so date
+Wed Nov 18 07:24:51  2026
+date -d "2045-06-15 12:34:56" || true
+date: invalid date '2045-06-15 12:34:56'
+LD_PRELOAD=./libc.fix.so date -d "2045-06-15 12:34:56"
+Thu Jun 15 12:34:56  2045
+```
+
 Pre-cooked copy-paste recipes are fantastic for instant gratification. They let a user verify that the code builds and runs in under two minutes without having to think about environment setup.
 
 Unfortunately, this is the one of the most unsuitable cases for such an approach since it is a kind of hacking a userland system layer for a legacy 32-bit system. Therefore, also emulation should be very specific.

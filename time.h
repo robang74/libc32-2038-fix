@@ -111,6 +111,12 @@ time_t timelocal (struct tm *__tp);
 int stime (const time_t *__when);
 time_t time (time_t *__timer);
 #ifdef OLD_TOOL_CHAIN
+# ifndef ADJ_SETOFFSET
+# define ADJ_SETOFFSET 0x0100
+# endif
+# ifndef ADJ_NANO
+# define ADJ_NANO 0x2000
+# endif
 int gettimeofday (struct timeval *__restrict __tv, struct timezone *__restrict __tz);
 #else
 int gettimeofday (struct timeval *__restrict __tv, void *__restrict __tz);
