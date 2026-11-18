@@ -82,7 +82,7 @@ Instead of altering the 4-byte `time_t` ABI — which would corrupt stack layout
 
 Compiling on 64-bit systems isn't relevant but it compiles.
 
-#### Native Compilation
+### Native Compilation
 
 ```bash
 make all
@@ -113,7 +113,7 @@ date: invalid date ‘2045-06-15 12:34:56’
 make: *** [Makefile:40: tests] Error 1
 ```
 
-#### Cross Compilation
+### Cross Compilation
 
 ```bash
 # Generic ARM 32-bit (Buildroot / OpenWrt / armhf)
@@ -127,7 +127,7 @@ CFLAGS="-O2 -march=armv7-a -mfloat-abi=softfp -mfpu=neon -fPIC -D_GNU_SOURCE"
 make CROSS_COMPILE=mipsel-linux-gnu-
 ```
 
-#### Container Compilation
+### Container Compilation
 
 Alpine 32-bit container compilation w/ musl, for example:
 
@@ -156,6 +156,11 @@ export devc
 test -e src || ln -s . src
 docker run -it --rm $devc /bin/ash -c "make all"
 ```
+
+> [!NOTE]
+> 
+> Alpine 32-bit w/ musl already support 64-bit extended `time_t` by `_TIME_BITS=64`.
+
 ```text
 rm -f time.o libc.fix.so
 gcc -O2 -Wall -Wextra -fPIC -D_GNU_SOURCE -c time.c -o time.o
@@ -174,11 +179,7 @@ LD_PRELOAD=./libc.fix.so date -d "2045-06-15 12:34:56"
 Wed Jun 15 12:34:56 +00:00 2045
 ```
 
-> [!NOTE]
->
-> Alpine 32-bit w/ musl already support 64-bit extended `time_t` by `_TIME_BITS=64`.
-
-#### Full 32-bit Testing
+### Full 32-bit Testing
 
 To test the `lib.fix.so` in a full 32-bit container the candidates are, in order of smaller image size:
 
