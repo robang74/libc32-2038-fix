@@ -1,3 +1,9 @@
+/* time.c/.h -- libc.fix, 2038 mitigation
+ *
+ * Copyright (c) 2026 [LuCy] <luchoas26@gmail.com>, MIT License
+ * Copyright (c) 2026 Roberto A. Foglietta <roberto.foglietta@gmail.com>
+ *
+ ******************************************************************************/
 #ifndef __TIME_H_
 #define __TIME_H_
 

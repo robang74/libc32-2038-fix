@@ -127,5 +127,12 @@ echo "/lib/libc.fix.so" > /etc/ld.so.preload
 
 ## Copyright & License
 
+**Sources**:
+
 - `Copyright (c) 2026, [LuCy] <luchoas26@gmail.com>, MIT License`
 - `Copyright (c) 2026, Roberto A. Foglietta <roberto.foglietta@gmail.com>`
+
+**README.md**:
+
+- `(c) 2026, Creative Commons Attribution-NonCommercial 4.0 International, by RAF`
+
