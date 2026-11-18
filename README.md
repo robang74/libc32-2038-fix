@@ -58,6 +58,8 @@ Built specifically for deployed hardware running legacy kernels and closed-sourc
 
 Instead of altering the 4-byte `time_t` ABI — which would corrupt stack layouts and registers in pre-compiled 32-bit binaries — `libc.fix.so` intercepts standard `<time.h>` calls via `LD_PRELOAD` (or `/etc/ld.so.preload`) and reinterprets the 32-bit epoch counter as an **unsigned integer** (`0` to `4,294,967,295` seconds).
 
+![table](img-01.png)
+
 ### Key Technical Features
 
 * **ABI-32-bit Unsigned Reinterpretation:** Keeps `sizeof(time_t) == 4` intact at the binary boundary while performing all internal calendar and epoch math using `unsigned int`, unlocking an extra ~68 years (2,147,483,648 seconds) with zero binary recompilation.
