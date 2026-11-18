@@ -247,6 +247,7 @@ This project is being used to demonstrate capability and generate commercial opp
 
 **Manual**: `README.md`
 
+- `(c) 2026, [LuCy] <luchoas26@gmail.com>, MIT License in origin`
 - `(c) 2026, Creative Commons Attribution-NonCommercial 4.0 International, by RAF`
 
 #### Credits
