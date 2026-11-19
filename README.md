@@ -97,7 +97,7 @@ Anyone who completes these missing parts is invited to share back their code and
 
 ## Building
 
-Using `CFLAGS='-DUSE_UTC_ONLY'` allows to skip entirely the `__timezone` access at the price of using only UTC timezone which for a legacy embedded system can be its own way of working, already. Potentially the more suitable way to proceed also when size matters and UTC as global fleet log timezone simplify the log parsing, and also avoid confusion about events order.
+Using `CFLAGS='-DUSE_UTC_ONLY'` skips `__timezone` access altogether and forces UTC-only behavior. On legacy embedded systems, that often matches existing conventions. This approach also reduces code size while keeping fleet logs in a single timezone for simpler parsing and unambiguous event ordering.
 
 ### Native Compilation
 
