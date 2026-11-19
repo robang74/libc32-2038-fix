@@ -128,6 +128,26 @@ int lucy_set_rtcc_tp(struct timespec *__tp)
     return 0;
 }
 
+#if defined(__USE_MISC) || defined(__USE_BSD) || defined(_GNU_SOURCE)
+// Populate tm_zone as +/-HH:MM (matching %:z) for callers like GNU date
+#define USE_TZ_HHMM 1
+#else
+#define USE_TZ_HHMM 0
+#endif
+
+static void format_tz_hhmm(struct tm *__ptm) {
+#if USE_TZ_HHMM
+		static __thread char tz_offset_str[16];
+		int off_h = -(int)__timezone / 3600;
+		int off_m = (int)__timezone % 3600;
+		if (off_m < 0) off_m = -off_m;
+		off_m /= 60;
+		sprintf(tz_offset_str, "%+03d:%02d", off_h, off_m);
+		__ptm->tm_zone = tz_offset_str;
+		__ptm->tm_gmtoff = -__timezone;
+#endif
+}
+
 //******************************************************************************
 //                      FUNCIONES DEL MODULO
 //******************************************************************************
@@ -172,6 +192,8 @@ struct tm *gmtime(const time_t * __timer)
     if (__tm.tm_mon > 0)
         __tm.tm_mon--;
     __tm.tm_year += 68;
+
+    format_tz_hhmm(&__tm);
 
     memcpy(&__ret, &__tm, sizeof(struct tm));
     return &__ret;
@@ -544,6 +566,7 @@ size_t strftime(char *__restrict __s, size_t __maxsize,
                     tlen = sprintf(tmp, frmarg, (unsigned)tm.tm_year + 1900);
                     break;
                 case 'Z': //Timezone name or abbreviation CDT
+                          //not yet, but formatted like %:z (+HH:MM)
                 case 'z':
                     var128A.si[0] = (int)__timezone / 3600;
                     var128A.si[2] = (int)__timezone - (var128A.si[0] * 3600);
@@ -563,10 +586,10 @@ size_t strftime(char *__restrict __s, size_t __maxsize,
                     } else {
                         var128A.si[1] |= 0xF0000;
                     }
-                    if (var128A.si[2] & 0xF0000)
+                    if (var128A.si[2]  & 0xF0000)
                         pch1 = "%+03d:%02d:%02d";
                     else
-                    if (var128A.si[1] & 0xF0000)
+                    if (var128A.si[1]  & 0xF0000)
                         pch1 = "%+03d:%02d";
                     else
                         pch1 = "%+03d";
