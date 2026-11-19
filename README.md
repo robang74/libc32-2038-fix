@@ -45,12 +45,12 @@ Built specifically for deployed hardware running legacy kernels and closed-sourc
 > **LIMITITATIONS APPLY**
 > 
 > * **The Pre-1970 Blind Spot**: it is a fundamentally flawed approach for systems that rely on timestamps before January 1, 1970 (UNIX epoch). Because standard 32-bit `time_t` is signed 32-bit integers, historical dates are represented as negative numbers while the unsigned wraps after 2038.
->
+> 
 > * **ABI Boundary Mismatch**: if a precompiled binary passes `time_t` pointers into kernel system calls directly (via raw syscalls rather than wrapped libc functions), the kernel will still interpret them as signed 32-bit integers, causing immediate overflow failures in 2038.
->
+> 
 > * **Static Closed-Source**: the `LD_PRELOAD` and `/etc/ld.so.preload` apply to all dynamically linked executables. Statically linked binaries bypass the dynamic linker and will not load preloaded libraries. If the binary is closed-source and statically linked, `libc.fix` cannot hook into it.
->
-> * **Non-Reentrant calls**: some functions rely on non-reentrant functions that return pointers to internal static storage. These dependencies introduce shared mutable state and potential interference between concurrent or nested calls. Further evaluation and refactoring are required, yet.
+> 
+> * **Non-Reentrant calls**: thread-safe thanks to `__thread` but still not async-safe because a signal handler on the same thread can overwrite the TLS buffer. Also the external `__timezone`, from `libc` is non-TLS (`.bss`), and it can't be made thread-safe via `__thread`.
 
 <br>
 
