@@ -58,7 +58,7 @@ Built specifically for deployed hardware running legacy kernels and closed-sourc
 
 Instead of altering the 4-byte `time_t` ABI — which would corrupt stack layouts and registers in pre-compiled 32-bit binaries — `libc.fix.so` intercepts standard `<time.h>` calls via `LD_PRELOAD` (or `/etc/ld.so.preload`) and reinterprets the 32-bit epoch counter as an **unsigned integer** (`0` to `4,294,967,295` seconds).
 
-![table](img-01.png)
+![table](img-01.png) <div align="center"><sup>Open the <a href="https://raw.githubusercontent.com/robang74/libc32-2038-fix/refs/heads/main/img-01.png" alt="image" target="_blank">image</a> in full screen</sup></div>
 
 ### Key Technical Features
 
