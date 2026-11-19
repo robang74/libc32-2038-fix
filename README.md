@@ -80,7 +80,7 @@ Instead of altering the 4-byte `time_t` ABI — which would corrupt stack layout
 * `asctime()`, `asctime_r()`, `ctime()`, `ctime_r()`
 * `strftime()` *(includes custom `%n` total epoch nanoseconds and `%N` fractional nanoseconds)*
 
-### README.md
+### Yet Incomplete API
 
 | Interface or subsystem      | What remains outside the current wrapper                      |
 | --------------------------- | -------------------------------------------------------------- |
