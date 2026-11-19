@@ -264,13 +264,15 @@ LD_PRELOAD=/path/to/libc.fix.so date
 
 ### 2. System-wide activation
 
-Copy `libc.fix.so` to `/lib/` (or `/data/lib/` on read-only root filesystems) and register it in `/etc/ld.so.preload`:
+As `root`, copy `libc.fix.so` to `/lib/` and register it in `/etc/ld.so.preload`:
 
 ```bash
 cp libc.fix.so /lib/libc.fix.so
 chmod 0755 /lib/libc.fix.so
-echo "/lib/libc.fix.so" > /etc/ld.so.preload
+echo "/lib/libc.fix.so" >> /etc/ld.so.preload
 ```
+
+or copy to `/data/lib/` on read-only root filesystems.
 
 ### 3. Copyright & License
 
