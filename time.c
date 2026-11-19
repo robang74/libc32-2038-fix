@@ -247,7 +247,11 @@ int len_ret=0;
 	return len_ret;
 }
 //=================================================================================================
-size_t strftime (char *__restrict __s, size_t __maxsize, const char *__restrict __format, const struct tm *__restrict __tp)
+#define strftime_macro_1 \
+  if ((lret+tlen) >= __maxsize) return lret; \
+  strcpy(__s,tmp);tmp[0]=0;__s+=tlen;*__s=0;lret+=tlen;tlen=0;
+size_t strftime (char *__restrict __s, size_t __maxsize,
+  const char *__restrict __format, const struct tm *__restrict __tp)
 {
 unsigned int lret=0;
 unsigned int tlen=0;
@@ -256,7 +260,6 @@ char tmp[64], arg[16];
 char frmarg[32];
 int arglen;
 __tvar128 var128A;
-//char* arginit;
 
 int k,i,j;
 char fmt_ch;
@@ -284,19 +287,16 @@ struct timespec tp;
     		k=(sizeof(token)-4);
     		token[k]=0;
     	}
-    	//fmt_ch=fmt[i + 1];
-    	//if (fmt_ch == '%' || fmt_ch == '\\' || fmt_ch == '\0') {
+
         if (__format[i + 1] == '%' || __format[i + 1] == '\0') {
             token[k] = '\0';
-//proc_k=k;
+
 			k = 0;
-//printf("frmtime: INIT P0[%03u] >>> i:%03u - k:%03u - j:%03u - token:[",proc_cnt,i,proc_k,j); printhexstr((unsigned char*)token,k);printf("]\n\'%s\'\n",token);
 			if (token[0] != '%') {
             	// it is not a format specifier
             	if (token[0]) {
-    				tlen=strcpy_len(tmp,token);
-    				if ((lret+tlen) >= __maxsize) return lret;
-    				strcpy(__s,tmp);tmp[0]=0;__s+=tlen;*__s=0;lret+=tlen;tlen=0;
+                tlen=strcpy_len(tmp,token);
+                strftime_macro_1
             	}
             } else {
             	fmt_ch=0;
@@ -365,17 +365,18 @@ struct timespec tp;
                 	if (arglen < 1) arglen=1;
                 	break;
                 }
-            	memcpy(arg, &frmarg[frmarg_half_size], frmarg_half_size);
+                memcpy(arg, &frmarg[frmarg_half_size], frmarg_half_size);
 /*
  * WARNING -- Potential Format String RiskLocation
  *
- * The Issue: arg is derived from user-controlled format specifier modifiers extracted from __format.
- * If arg contains unexpected format specifiers (such as %n or additional % signs), passing it directly
- * into sprintf's format argument can cause undefined behavior or format string injection vulnerabilities.
- * Ensure arg is strictly filtered to only contain numeric digits or expected width specifiers before
- * passing it to sprintf (aka user inputs sanification).
+ * The Issue: arg is derived from user-controlled format specifier modifiers
+ * extracted from __format. If arg contains unexpected format specifiers (such
+ * as %n or additional % signs), passing it directly into sprintf's format
+ * argument can cause undefined behavior or format string injection vulnerabilities.
+ * Ensure arg is strictly filtered to only contain numeric digits or expected width
+ * specifiers before passing it to sprintf (aka user inputs sanification).
  */
-            	sprintf(frmarg, "\%%%s0%du",arg,arglen);
+                sprintf(frmarg, "\%%%s0%du",arg,arglen);
 
                 switch(fmt_ch) {
                 case 'a': 	//Abbreviated weekday name 	Sun
@@ -424,6 +425,9 @@ struct timespec tp;
                 	break;
                 case 'n':	//Nanosegundos
                 	memcpy(arg, &frmarg[frmarg_half_size], frmarg_half_size);
+/*
+ * WARNING -- Potential Format String RiskLocation
+ */
                 	//	Maximo valor : 0-4294967295999999999
                 	sprintf(frmarg, "\%%%s0%dllu", arg, arglen);
             		  sprintf(tmp, frmarg,timespec2ns(&tp));
@@ -501,16 +505,13 @@ struct timespec tp;
                 	break;
                 }
                 if (token[j]) tlen+=strcpy_len(&tmp[tlen],&token[j]);
-                if ((lret+tlen) >= __maxsize) return lret;
-                strcpy(__s,tmp);tmp[0]=0;__s+=tlen;*__s=0;lret+=tlen;tlen=0;
+                strftime_macro_1
                 fmt_ch=0;
             }
         }
-        if ((lret+tlen) >= __maxsize) return lret;
-        strcpy(__s,tmp);tmp[0]=0;__s+=tlen;*__s=0;lret+=tlen;tlen=0;
+        strftime_macro_1
     }
-    if ((lret+tlen) >= __maxsize) return lret;
-    strcpy(__s,tmp);tmp[0]=0;__s+=tlen;*__s=0;lret+=tlen;tlen=0;
+    strftime_macro_1
     return lret;
 }
 //=================================================================================================
