@@ -292,7 +292,7 @@ size_t strftime(char *__restrict __s, size_t __maxsize,
     int arglen;
     __tvar128 var128A;
 
-    int k, i, j;
+    int i, j = 0, k = 0;
     char fmt_ch;
     char *pch1;
 
@@ -311,8 +311,7 @@ size_t strftime(char *__restrict __s, size_t __maxsize,
     memcpy(&tp, &actual_time, sizeof(tp));
 
     // parsing the formatted string
-    k = 0;
-    j = 0;
+    //fprintf(stderr, "%s\n", __format);
     for (i = 0; __format[i] != '\0'; i++) {
         if ((unsigned)k < (sizeof(token) - 4)) {
             token[k++] = __format[i];
@@ -441,10 +440,9 @@ size_t strftime(char *__restrict __s, size_t __maxsize,
                     tlen = strcpy_len(tmp, __Bfmt[tm.tm_mon]);
                     break;
                 case 'c': //Date and time representation Sun Aug 19 02:56:02 2012
-                    tlen =
-                      sprintf(tmp, "%s %s %02d %02d:%02d:%02d %04d",
+                    tlen = sprintf(tmp, "%s %s %02d %02d:%02d:%02d %04d",
                         __afmt[tm.tm_wday], __bfmt[tm.tm_mon], tm.tm_mday,
-                          tm.tm_hour, tm.tm_min, tm.tm_sec % 60, tm.tm_year + 1900);
+                        tm.tm_hour, tm.tm_min, tm.tm_sec % 60, tm.tm_year + 1900);
                     break;
                 case 'C': //Año, dividido por 100 (por ejemplo, el siglo).
                     tlen = sprintf(tmp, frmarg, (unsigned)(tm.tm_year + 1900) / 100);
@@ -532,9 +530,8 @@ size_t strftime(char *__restrict __s, size_t __maxsize,
                            (tm.tm_wday ? (tm.tm_wday - 1) : 6)) / 7) % 100);
                     break;
                 case 'x': //Date representation 08/19/12
-                    tlen =
-                      sprintf(tmp, "%02d/%02d/%02d", tm.tm_mday, tm.tm_mon + 1,
-                        (tm.tm_year + 1900) % 100);
+                    tlen = sprintf(tmp, "%02d/%02d/%02d", tm.tm_mday,
+                        tm.tm_mon + 1, (tm.tm_year + 1900) % 100);
                     break;
                 case 'X': //Time representation 02:50:06
                     tlen = sprintf(tmp, "%02d:%02d:%02d",
@@ -567,14 +564,15 @@ size_t strftime(char *__restrict __s, size_t __maxsize,
                     }
                     if (var128A.si[2] & 0xF0000)
                         pch1 = "%+03d:%02d:%02d";
-                    else if (var128A.si[1] & 0xF0000)
+                    else
+                    if (var128A.si[1] & 0xF0000)
                         pch1 = "%+03d:%02d";
                     else
                         pch1 = "%+03d";
                     var128A.si[1] &= 0xFF;
                     var128A.si[2] &= 0xFF;
                     tlen = sprintf(tmp, pch1, var128A.si[0],
-                      var128A.si[1], var128A.si[2]);
+                               var128A.si[1], var128A.si[2]);
                     break;
                 default:
                     tlen = strcpy_len(tmp, token);
