@@ -23,6 +23,15 @@
 
 #define frmarg_half_size (sizeof(frmarg) >> 1)
 
+//RAF: to have one snapshot for each calculation,
+//     doesn't protect against async re-entering
+#pragma message \
+("__timezone atomic read is system/hw dependent, in the most general case")
+#define noval_tmezne 86400L //RAF: potentially 0L could be more suitable here
+#define reset_tmezne() { tmezne = noval_tmezne; }
+#define initl_tmezne() ({ if(tmezne == noval_tmezne) tmezne = __timezone; tmezne; })
+static __thread long tmezne = noval_tmezne;
+
 #include "time.h"
 //******************************************************************************
 //DEFINICION CONSTANTES DE USO INTERNO
@@ -139,14 +148,16 @@ static void format_tz_hhmm(struct tm *__ptm) {
     //RAF: lib.fix.so gmtime_r() and localtime_r() are thread-safe
     //     because of the __thread usage in format_tz_hhmm(), watch out!
     static __thread char tz_offset_str[16];
-    int off_h = -(int)__timezone / 3600;
-    int off_m = (int)__timezone % 3600;
+    initl_tmezne();
+    int off_h = -(int)tmezne / 3600;
+    int off_m = (int)tmezne % 3600;
     if (off_m < 0) off_m = -off_m;
     off_m /= 60;
     sprintf(tz_offset_str, "%+03d:%02d", off_h, off_m);
     __ptm->tm_zone = tz_offset_str;
-    __ptm->tm_gmtoff = -__timezone;
+    __ptm->tm_gmtoff = -tmezne;
 #endif
+    reset_tmezne();
 }
 
 //******************************************************************************
@@ -214,7 +225,7 @@ struct tm *gmtime_r(const time_t * __restrict __timer,
 
 struct tm *localtime(const time_t * __timer)
 {
-    time_t tm = *__timer + __timezone;
+    time_t tm = *__timer + initl_tmezne();
     return gmtime(&tm);
 }
 
@@ -292,7 +303,7 @@ time_t timegm(struct tm *__tp)
 
 time_t timelocal(struct tm *__tp)
 {
-    return (mktime(__tp) + __timezone);
+    return mktime(__tp) + initl_tmezne();
 }
 
 int strcpy_len(char *__dest, const char *__src)
@@ -309,8 +320,8 @@ int strcpy_len(char *__dest, const char *__src)
 }
 
 #define strftime_macro_1 \
-  if ((lret+tlen) >= __maxsize) return lret; \
-  strcpy(__s,tmp);tmp[0]=0;__s+=tlen;*__s=0;lret+=tlen;tlen=0
+  if ((lret+tlen) >= __maxsize) { reset_tmezne(); return lret; } \
+  strcpy(__s,tmp); tmp[0]=0; __s+=tlen; *__s=0; lret+=tlen; tlen=0
 size_t strftime(char *__restrict __s, size_t __maxsize,
     const char *__restrict __format, const struct tm *__restrict __tp)
 {
@@ -328,11 +339,11 @@ size_t strftime(char *__restrict __s, size_t __maxsize,
 
     *__s = 0;
     memset(token, 0x00, sizeof(token));
-
-    if (__timezone < -43200)
-        __timezone = -43200;
-    else if (__timezone > 50400)
-        __timezone = 50400;
+    initl_tmezne();
+    if (tmezne < -43200)
+        tmezne = -43200;
+    else if (tmezne > 50400)
+        tmezne = 50400;
 
     struct tm tm;
     struct timespec tp;
@@ -576,8 +587,8 @@ size_t strftime(char *__restrict __s, size_t __maxsize,
                 case 'Z': //Timezone name or abbreviation CDT
                           //not yet, but formatted like %:z (+HH:MM)
                 case 'z':
-                    var128A.si[0] = (int)__timezone / 3600;
-                    var128A.si[2] = (int)__timezone - (var128A.si[0] * 3600);
+                    var128A.si[0] = (int)tmezne / 3600;
+                    var128A.si[2] = (int)tmezne - (var128A.si[0] * 3600);
                     if (var128A.si[2] < 0)
                         var128A.si[2] *= -1;
                     var128A.si[1] = var128A.si[2] / 60;
@@ -619,6 +630,7 @@ size_t strftime(char *__restrict __s, size_t __maxsize,
         strftime_macro_1;
     }
     strftime_macro_1;
+    reset_tmezne();
     return lret;
 }
 
