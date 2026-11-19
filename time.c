@@ -23,13 +23,20 @@
 
 #define frmarg_half_size (sizeof(frmarg) >> 1)
 
+#ifdef USE_UTC_ONLY
+//RAF: potentially 0L could be more suitable here
+#define noval_tmezne 0L
+#define reset_tmezne() {}
+#define initl_tmezne() ({ tmezne; })
+#else
 //RAF: to have one snapshot for each calculation,
 //     doesn't protect against async re-entering
 #pragma message \
 ("__timezone atomic read is system/hw dependent, in the most general case")
-#define noval_tmezne 86400L //RAF: potentially 0L could be more suitable here
+#define noval_tmezne 86400L
 #define reset_tmezne() { tmezne = noval_tmezne; }
 #define initl_tmezne() ({ if(tmezne == noval_tmezne) tmezne = __timezone; tmezne; })
+#endif
 static __thread long tmezne = noval_tmezne;
 
 #include "time.h"

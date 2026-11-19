@@ -97,9 +97,11 @@ Anyone who completes these missing parts is invited to share back their code and
 
 ## Building
 
-Compiling on 64-bit systems isn't relevant but it compiles.
+Using `CFLAGS='-DUSE_UTC_ONLY'` allows to skip entirely the `__timezone` access at the price of using only UTC timezone which for a legacy embedded system can be its own way of working, already. Potentially the more suitable way to proceed also when size matters and UTC as global fleet log timezone simplify the log parsing, and also avoid confusion about events order.
 
 ### Native Compilation
+
+Compiling on 64-bit systems isn't relevant but it compiles.
 
 ```bash
 make all
