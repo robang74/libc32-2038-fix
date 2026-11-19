@@ -26,12 +26,16 @@ $(TARGET): $(OBJS)
 %.o: %.c time.h
 	$(CC) $(CFLAGS) -c $< -o $@
 
+testsuite: testsuite.c $(TARGET)
+	$(CC) $(CFLAGS)    $< -o $@
+	LD_PRELOAD=./$(TARGET) ./$@
+
 install: $(TARGET)
 	install -d $(DESTDIR)$(LIBDIR)
 	install -m 0755 $(TARGET) $(DESTDIR)$(LIBDIR)/$(TARGET)
 
 clean:
-	rm -f $(OBJS) $(TARGET)
+	rm -f $(OBJS) $(TARGET) testsuite
 
 tests: $(TARGET)
 	date
