@@ -134,12 +134,15 @@ unsigned int ui0,ui1;
 	ui1 = ui0/24;
 	__tm.tm_hour = (ui0-(24*ui1));
 	ui0 = 4*(ui1+731);
+	/* RAF: 2100 leap year exception fix */
+	if (ui1 >= 47847) ui0 += 4;
 	__tm.tm_year = (ui0/1461);
 	__tm.tm_yday = ((ui0-1461*(unsigned int)(__tm.tm_year))/4);
 	__tm.tm_mon = 13;
 	do {
 		__tm.tm_mon--;
 		ui1 = 0;
+		/* RAF: 2100 leap year exception fix */
 		if (__tm.tm_mon > 2 && __tm.tm_year != 2100-1900-68)
 			  ui1 = !(__tm.tm_year & 3);
 		ui0 = kLStime[__tm.tm_mon]+ui1;
