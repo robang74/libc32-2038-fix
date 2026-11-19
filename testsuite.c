@@ -52,8 +52,7 @@ int test_2100_boundary(void)
     size_t num_cases = sizeof(test_cases) / sizeof(test_cases[0]);
     int failures = 0;
 
-    printf("=== Running Y2K38 / 2100 Century / Y2106 Boundary Testsuite ===\n");
-    printf("sizeof(time_t) = %zu bytes\n\n", sizeof(time_t));
+    printf("\n=== Running Y2K38 / 2100 Century / Y2106 Boundary Testsuite ===\n\n");
 
     for (size_t i = 0; i < num_cases; i++) {
         const boundary_case_t *tc = &test_cases[i];
@@ -105,8 +104,8 @@ int test_2100_boundary(void)
         }
     }
 
-    printf("\nSummary: %zu/%zu passed, %d failed.\n",
-        num_cases - (size_t)failures, num_cases, failures);
+    printf("\nSummary: %zu/%zu passed and %d failed, sizeof(time_t) = %zu bytes\n\n",
+        num_cases - (size_t)failures, num_cases, failures, sizeof(time_t));
 
     return failures;
 }
