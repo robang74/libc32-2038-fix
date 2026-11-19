@@ -80,6 +80,18 @@ Instead of altering the 4-byte `time_t` ABI — which would corrupt stack layout
 * `asctime()`, `asctime_r()`, `ctime()`, `ctime_r()`
 * `strftime()` *(includes custom `%n` total epoch nanoseconds and `%N` fractional nanoseconds)*
 
+### README.md
+
+| Interface or subsystem      | What remains outside the current wrapper                      |
+| --------------------------- | -------------------------------------------------------------- |
+| `clock_gettime()`           | Direct application calls are not intercepted                   |
+| `clock_settime()`           | Direct clock-setting calls are not intercepted                 |
+| `clock_nanosleep()`         | Absolute-time operations can retain old ABI limitations        |
+| `timer_*()`                 | Timer interfaces need separate compatibility assessment        |
+| `stat()`, `fstat()`         | Filesystem timestamp structures have their own ABI limitations |
+| `utimensat()`, `futimens()` | Timestamp modification is not covered                          |
+| `difftime()`                | Application-side difference calculations are not intercepted   |
+
 <br>
 
 ## Building
