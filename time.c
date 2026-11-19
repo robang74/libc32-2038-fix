@@ -54,7 +54,6 @@ struct timespec actual_time = { 0, 0 };
 
 //******************************************************************************
 //DEFINICION DE FUNCIONES EXTERNAS
-//extern int clock_gettime (clockid_t __clock_id, struct timespec *__tp) __THROW;
 
 //******************************************************************************
 //DEFINICION DE FUNCIONES DE USO INTERNO
