@@ -326,9 +326,9 @@ int strcpy_len(char *__dest, const char *__src)
     return len_ret;
 }
 
-#define strftime_macro_1 \
+#define strftime_append_or_return() { \
   if ((lret+tlen) >= __maxsize) { reset_tmezne(); return lret; } \
-  strcpy(__s,tmp); tmp[0]=0; __s+=tlen; *__s=0; lret+=tlen; tlen=0
+  strcpy(__s,tmp); tmp[0]=0; __s+=tlen; *__s=0; lret+=tlen; tlen=0; }
 size_t strftime(char *__restrict __s, size_t __maxsize,
     const char *__restrict __format, const struct tm *__restrict __tp)
 {
@@ -376,7 +376,7 @@ size_t strftime(char *__restrict __s, size_t __maxsize,
                 // it is not a format specifier
                 if (token[0]) {
                     tlen = strcpy_len(tmp, token);
-                    strftime_macro_1;
+                    strftime_append_or_return();
                 }
             } else {
                 fmt_ch = 0;
@@ -630,13 +630,13 @@ size_t strftime(char *__restrict __s, size_t __maxsize,
                 }
                 if (token[j])
                     tlen += strcpy_len(&tmp[tlen], &token[j]);
-                strftime_macro_1;
+                strftime_append_or_return();
                 fmt_ch = 0;
             }
         }
-        strftime_macro_1;
+        strftime_append_or_return();
     }
-    strftime_macro_1;
+    strftime_append_or_return();
     reset_tmezne();
     return lret;
 }
