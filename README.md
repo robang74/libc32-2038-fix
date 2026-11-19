@@ -88,6 +88,7 @@ Instead of altering the 4-byte `time_t` ABI — which would corrupt stack layout
 * `clock_nanosleep()`: absolute-time operations can retain old ABI limitations
 * `clock_gettime()`, `clock_settime()`: direct application calls are not intercepted
 * `stat()`, `fstat()`: filesystem timestamp structures have their own ABI limitations
+* `tzset()`: to rewrite without `dlsym()` for providing `__timezone` atomic access
 * `difftime()`: application-side difference calculations are not intercepted
 
 Anyone who completes these missing parts is invited to share back their code and contribute to the project.
