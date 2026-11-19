@@ -202,10 +202,11 @@ struct tm *gmtime(const time_t * __timer)
 struct tm *gmtime_r(const time_t * __restrict __timer,
     struct tm *__restrict __tp)
 {
-    struct tm *__ret = gmtime(__timer);
-    if (__tp != NULL)
+    if (__tp != NULL) {
+        struct tm *__ret = gmtime(__timer);
         memcpy(__tp, __ret, sizeof(struct tm));
-    return __ret;
+    }
+    return __tp;
 }
 
 struct tm *localtime(const time_t * __timer)
@@ -217,10 +218,11 @@ struct tm *localtime(const time_t * __timer)
 struct tm *localtime_r(const time_t * __restrict __timer,
     struct tm *__restrict __tp)
 {
-    struct tm *__ret = localtime(__timer);
-    if (__tp != NULL)
+    if (__tp != NULL) {
+        struct tm *__ret = localtime(__timer);
         memcpy(__tp, __ret, sizeof(struct tm));
-    return __ret;
+    }
+    return __tp;
 }
 
 //"Day Mon dd hh:mm:ss yyyy\n"
@@ -246,10 +248,11 @@ char *ctime(const time_t * __timer)
 
 char *asctime_r(const struct tm *__restrict __tp, char *__restrict __buf)
 {
-    char *str_time = asctime(__tp);
-    if (__buf != NULL)
+    if (__buf != NULL) {
+        char *str_time = asctime(__tp);
         strcpy(__buf, str_time);
-    return str_time;
+    }
+    return __buf;
 }
 
 /* Equivalent to `asctime_r (localtime_r (timer, *TMP*), buf)'.  */
