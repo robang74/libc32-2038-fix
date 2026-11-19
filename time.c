@@ -544,6 +544,7 @@ size_t strftime(char *__restrict __s, size_t __maxsize,
                     tlen = sprintf(tmp, frmarg, (unsigned)tm.tm_year + 1900);
                     break;
                 case 'Z': //Timezone name or abbreviation CDT
+                case 'z':
                     var128A.si[0] = (int)__timezone / 3600;
                     var128A.si[2] = (int)__timezone - (var128A.si[0] * 3600);
                     if (var128A.si[2] < 0)
