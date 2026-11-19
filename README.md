@@ -90,6 +90,8 @@ Instead of altering the 4-byte `time_t` ABI — which would corrupt stack layout
 * `stat()`, `fstat()`: filesystem timestamp structures have their own ABI limitations
 * `difftime()`: application-side difference calculations are not intercepted
 
+Anyone who completes these missing parts is invited to share back their code and contribute to the project.
+
 <br>
 
 ## Building
