@@ -105,28 +105,28 @@ make all
 ```
 or
 ```bash
-make CFLAGS="-DOLD_TOOL_CHAIN" all
+make CFLAGS='-DOLD_TOOL_CHAIN' all
 ```
 
 The expected result on a 64-bit system is a failure:
 
 ```text
-rm -f time.o libc.fix.so
+rm -f time.o libc.fix.so testsuite
 gcc -O2 -Wall -Wextra -fPIC -D_GNU_SOURCE -c time.c -o time.o
 gcc -shared -Wl,-soname,libc.fix.so -o libc.fix.so time.o -ldl
 strip --strip-unneeded libc.fix.so
 size libc.fix.so
    text	   data	    bss	    dec	    hex	filename
-  12451	   1152	    152	  13755	   35bb	libc.fix.so
+  12835	   1192	    168	  14195	   3773	libc.fix.so
 date
-Wed 18 Nov 08:02:34 CET 2026
+Thu 19 Nov 07:39:42 CET 2026
 LD_PRELOAD=./libc.fix.so date
-Wed 18 Nov 07:02:34  2026
-date -d "2045-06-15 12:34:56"
+Thu 19 Nov 06:39:42 +00:00 2026
+date -d "2045-06-15 12:34:56" || true
 Thu 15 Jun 12:34:56 CEST 2045
 LD_PRELOAD=./libc.fix.so date -d "2045-06-15 12:34:56"
 date: invalid date ‘2045-06-15 12:34:56’
-make: *** [Makefile:40: tests] Error 1
+make: *** [Makefile:44: tests] Error 1
 ```
 
 ### Cross Compilation
@@ -170,7 +170,7 @@ export devc
 
 ```bash
 test -e src || ln -s . src
-docker run -it --rm $devc /bin/ash -c "make all"
+docker run -it --rm $devc /bin/sh -c "make all"
 ```
 
 > [!NOTE]
@@ -178,21 +178,21 @@ docker run -it --rm $devc /bin/ash -c "make all"
 > Alpine 32-bit w/ musl already support 64-bit extended `time_t` by `_TIME_BITS=64`.
 
 ```text
-rm -f time.o libc.fix.so
+rm -f time.o libc.fix.so testsuite
 gcc -O2 -Wall -Wextra -fPIC -D_GNU_SOURCE -c time.c -o time.o
 gcc -shared -Wl,-soname,libc.fix.so -o libc.fix.so time.o -ldl
 strip --strip-unneeded libc.fix.so
 size libc.fix.so
    text	   data	    bss	    dec	    hex	filename
-  14051	    612	    140	  14803	   39d3	libc.fix.so
+  14175	    624	    156	  14955	   3a6b	libc.fix.so
 date
-Wed Nov 18 06:28:08 UTC 2026
+Thu Nov 19 06:43:54 UTC 2026
 LD_PRELOAD=./libc.fix.so date
-Wed Nov 18 06:28:08 +00:00 2026
-date -d "2045-06-15 12:34:56"
+Thu Nov 19 06:43:54 +00:00 2026
+date -d "2045-06-15 12:34:56" || true
 Thu Jun 15 12:34:56 UTC 2045
 LD_PRELOAD=./libc.fix.so date -d "2045-06-15 12:34:56"
-Wed Jun 15 12:34:56 +00:00 2045
+Thu Jun 15 12:34:56 +00:00 2045
 ```
 
 ### Full 32-bit Testing
@@ -208,21 +208,21 @@ For Ubuntu, the instructions for installing the necessary packages are:
 The expected result on a full 32-bit system is a failure without `libc.fix.so` and a success when the fix applies:
 
 ```text
-rm -f time.o libc.fix.so
+rm -f time.o libc.fix.so testsuite
 gcc -DOLD_TOOL_CHAIN -c time.c -o time.o
 gcc -shared -Wl,-soname,libc.fix.so -o libc.fix.so time.o -ldl
 strip --strip-unneeded libc.fix.so
 size libc.fix.so
    text	   data	    bss	    dec	    hex	filename
-  14380	    516	    160	  15056	   3ad0	libc.fix.so
+  14732	    524	    176	  15432	   3c48	libc.fix.so
 date
-Wed Nov 18 07:24:51 UTC 2026
+Thu Nov 19 06:45:25 UTC 2026
 LD_PRELOAD=./libc.fix.so date
-Wed Nov 18 07:24:51  2026
+Thu Nov 19 06:45:25 +00:00 2026
 date -d "2045-06-15 12:34:56" || true
 date: invalid date '2045-06-15 12:34:56'
 LD_PRELOAD=./libc.fix.so date -d "2045-06-15 12:34:56"
-Thu Jun 15 12:34:56  2045
+Thu Jun 15 12:34:56 +00:00 2045
 ```
 
 Pre-cooked copy-paste recipes are fantastic for instant gratification. They let a user verify that the code builds and runs in under two minutes without having to think about environment setup.
