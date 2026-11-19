@@ -251,6 +251,8 @@ While an `EOVERFLOW` is triggered when a modern or mixed-ABI user-space componen
 
 A comparable discrepancy occurs when the `printk()` writes a date/time read from a { filesystem, network, firmware, chips } which could be found checking by `dmesg`. While monotonic booting timestamps refers to the ticking subsystem T=`[0.000]` initialisation, instead.
 
+Finally, literal timezone support is incomplete as can be seen in the Ubuntu 14.04 test output. This isn't necessarily a flaw but can impact on scripts and user-space logs, making scripts or automatic log analysis or fleet management tools potentially failing
+
 ---
 
 ### 1. Test on a single command
