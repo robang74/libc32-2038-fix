@@ -137,14 +137,16 @@ int lucy_set_rtcc_tp(struct timespec *__tp)
 
 static void format_tz_hhmm(struct tm *__ptm) {
 #if USE_TZ_HHMM
-		static __thread char tz_offset_str[16];
-		int off_h = -(int)__timezone / 3600;
-		int off_m = (int)__timezone % 3600;
-		if (off_m < 0) off_m = -off_m;
-		off_m /= 60;
-		sprintf(tz_offset_str, "%+03d:%02d", off_h, off_m);
-		__ptm->tm_zone = tz_offset_str;
-		__ptm->tm_gmtoff = -__timezone;
+    //RAF: lib.fix.so gmtime_r() and localtime_r() are thread-safe
+    //     because of the __thread usage in format_tz_hhmm(), watch out!
+    static __thread char tz_offset_str[16];
+    int off_h = -(int)__timezone / 3600;
+    int off_m = (int)__timezone % 3600;
+    if (off_m < 0) off_m = -off_m;
+    off_m /= 60;
+    sprintf(tz_offset_str, "%+03d:%02d", off_h, off_m);
+    __ptm->tm_zone = tz_offset_str;
+    __ptm->tm_gmtoff = -__timezone;
 #endif
 }
 
@@ -153,7 +155,9 @@ static void format_tz_hhmm(struct tm *__ptm) {
 //******************************************************************************
 struct tm *gmtime(const time_t * __timer)
 {
-    static struct tm __ret;
+    //RAF: lib.fix.so gmtime_r() and localtime_r() are thread-safe
+    //     because of the __thread usage in gmtime(), watch out!
+    static __thread struct tm __ret;
     struct tm __tm;
     unsigned ui0, ui1;
 
@@ -228,7 +232,9 @@ struct tm *localtime_r(const time_t * __restrict __timer,
 //"Day Mon dd hh:mm:ss yyyy\n"
 char *asctime(const struct tm *__tp)
 {
-    static char str_time[32];
+    //RAF: lib.fix.so asctime_r() and ctime_r() are thread-safe
+    //     because of the __thread usage in asctime(), watch out!
+    static __thread char str_time[32];
     unsigned tm_mon = (unsigned)__tp->tm_mon;
     unsigned tm_wday = (unsigned)__tp->tm_wday;
     if (tm_mon > 11)
